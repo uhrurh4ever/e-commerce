@@ -4,14 +4,18 @@ import com.practice.ecommercebackend.api.model.LoginBody;
 import com.practice.ecommercebackend.api.model.LoginResponse;
 import com.practice.ecommercebackend.api.model.RegistrationBody;
 import com.practice.ecommercebackend.exception.UserAlreadyExistsException;
+import com.practice.ecommercebackend.model.LocalUser;
 import com.practice.ecommercebackend.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 @Getter
 @Setter
@@ -42,5 +46,10 @@ public class AuthenticationController {
         LoginResponse response = new LoginResponse();
         response.setJwt(jwt);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/me")
+    public LocalUser getLoggedInUserProfile(@AuthenticationPrincipal LocalUser user){
+        return user;
     }
 }
